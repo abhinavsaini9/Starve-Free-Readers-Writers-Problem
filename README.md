@@ -1,5 +1,5 @@
 # Starve-Free-Readers-Writers-Problem
-CSN - 232 Assignment 
+<b>CSN - 232 Assignment</b> 
 
 Readers-Writers Problem is a classical situation where modification and reading of a shared resource simultaneously by concurrent threads occurs. 
 
