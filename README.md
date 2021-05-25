@@ -20,7 +20,44 @@ As compared to the previous two problems, this problem overcomes the drawbacks o
 
 ### Solution
 
-First we define the structure of a Semaphore and all it's funcitons.
+First we define the structure for processes and Queue data structure.
+```cpp
+struct Process {
+    Process* next;
+    int process_id;
+}
+
+struct Queue {
+    Process* head, back;
+    
+   	void push(int p_id) {          //push function
+        Process* process = new Process();
+        process.process_id = p_id;
+        if(back == NULL) {
+            head = process;
+            back = process; 
+        } else {
+            back.next = process;
+            back = process;
+        }
+    }
+    
+    int pop() {                   //pop function
+        if(head == NULL) {
+            return -1;            // underflow 
+        } else {
+            int p_id = head.process_id;
+            head = head.next;
+            if(head == NULL) {
+                back = NULL;
+            }
+            
+            return p_id;
+        }
+    }
+}
+```
+Next we define the structure of a Semaphore and all it's funcitons.
 
 ```cpp
 struct Semaphore{
@@ -30,7 +67,7 @@ struct Semaphore{
   void wait(int p_id){
     value--;
     if(value < 0){
-    queue -> push(p_id);
+    queue.push(p_id);
     block(p_id);                   //block process until wake is called             
     }
   }
@@ -38,7 +75,7 @@ struct Semaphore{
   void signal(){
     value++;
     if(value <= 0){
-      int p_id = queue -> pop();
+      int p_id = queue.pop();
       wake(p_id);                   // wake the process
     }
   }
@@ -66,7 +103,6 @@ Once a writer has entered the waiting list no new reading process can start unti
 
 ```cpp
     // All processes are given an unique id
-    process_id;
     in.wait(process_id);        // Wait for the permission
     counter_in++;               // increases as reader starts reading
     in.signal();                //  signal other readers 
